@@ -1,7 +1,7 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './user_entity';
+import { User } from './user.entity';
 
 interface CreateUserInput {
   username: string;
@@ -23,7 +23,7 @@ export class UserService {
   async createUser(input: CreateUserInput): Promise<User> {
     const { username, password, name, age, job, resolution, role } = input;
 
-    const nameCheck = await this.userRepository.findOne({ where: { username } });
+    const nameCheck = await this.userRepository.findOneBy({ username });
     if (nameCheck) {
       throw new ConflictException('이미 등록된 사용자의 이름입니다.');
     }
