@@ -12,12 +12,12 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, password: string): Promise<string> {
-    const user: User | null = await this.userService.findUsername(username); //유저 찾기
+    const user: User | null = await this.userService.findUsername(username);
     if (!user) {
-      throw new UnauthorizedException('사용자를 찾을 수 없습니다.'); //예외처리리
+      throw new UnauthorizedException('사용자를 찾을 수 없습니다.'); //예외처리
     }
 
-    const match: boolean = await bcrypt.compare(password, user.password); //비밀번호 비교
+    const match: boolean = await bcrypt.compare(password, user.password);
     if (!match) {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }

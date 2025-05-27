@@ -7,8 +7,11 @@ export class AuthController{
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() input: LoginUserInput): Promise<{ accessToken: string}> {
-    const accessToken = await this.authService.validateUser(input.username, input.password);
+  async login(
+    @Body('username') username: string,
+    @Body('password') password: string,
+  ): Promise<{ accessToken: string }> {
+    const accessToken = await this.authService.validateUser(username, password);
     return { accessToken };
   }
 }
