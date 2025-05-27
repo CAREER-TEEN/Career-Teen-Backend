@@ -2,6 +2,7 @@ import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import * as bcrypt from 'bcrypt';
 
 interface CreateUserInput {
   username: string;
@@ -28,9 +29,10 @@ export class UserService {
       throw new ConflictException('이미 등록된 사용자의 이름입니다.');
     }
 
+    const hashPassword = await bcrypt.hash(password, 10);
     const newUser = this.userRepository.create({
       username,
-      passwd: password, // 암호화 예정
+      passwd: hashPassword, //암호화 비밀번호
       name,
       age,
       job,
