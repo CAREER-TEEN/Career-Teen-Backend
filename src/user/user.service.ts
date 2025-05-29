@@ -50,4 +50,8 @@ export class UserService {
   async findUserById(id: number): Promise<User | null> {
     return await this.userRepository.findOneBy({ id });
   }
+
+  async findUsername(username: string): Promise<User | null> {
+    return this.userRepository.findOne({ where: { username } });
+  }
 }

@@ -1,6 +1,5 @@
 import { IsString, IsInt, IsEnum, IsNotEmpty } from 'class-validator';
-import { User } from '../user/user.entity.ts';
-
+import { User } from '../user.entity';
 export class CreateUserInput {
   @IsString()
   @IsNotEmpty()
