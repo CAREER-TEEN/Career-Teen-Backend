@@ -2,7 +2,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UserService } from '../user/user.service';
-import { User } from 'src/user/user.entity';
+
+type AuthUserPayload = {
+  id: number;
+  username: string;
+  role: string;
+};
 
 @Injectable()
 export class AuthService {
@@ -11,17 +16,31 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<string> {
-    const user: User | null = await this.userService.findUsername(username);
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<AuthUserPayload> {
+    const user = await this.userService.findUsername(username);
     if (!user) {
       throw new UnauthorizedException('사용자를 찾을 수 없습니다.');
     }
 
-    const match: boolean = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password);
     if (!match) {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
 
-    return this.jwtService.sign({ sub: user.id, role: user.role }); //JWT 토큰
+    return {
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    };
+  }
+
+  login(user: AuthUserPayload): { accessToken: string } {
+    const payload = { sub: user.id, username: user.username, role: user.role };
+    return {
+      accessToken: this.jwtService.sign(payload),
+    };
   }
 }
