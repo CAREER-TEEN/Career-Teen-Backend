@@ -15,7 +15,7 @@ interface EnvConfig {
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly configService: ConfigService<EnvConfig>) {
-    const jwtSecret = configService.get<string>('JWT_SECRET')!;
+    const jwtSecret = configService.get<string>('JWT_SECRET');
     if (typeof jwtSecret !== 'string') {
       throw new Error('JWT_SECRET is not defined or not a string');
     }

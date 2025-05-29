@@ -17,7 +17,7 @@ export class AuthService {
       throw new UnauthorizedException('사용자를 찾을 수 없습니다.'); //예외처리
     }
 
-    const match: boolean = await bcrypt.compare(password, user.passwd);
+    const match: boolean = await bcrypt.compare(password, user.password);
     if (!match) {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }

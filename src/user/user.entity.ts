@@ -1,12 +1,10 @@
-// CRLF -> LF로 변경 (CRLF는 종료구문에 오류 표시함)
-// spaces 2로 변경
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-} from 'typeorm'; //npm install typeorm
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -24,13 +22,13 @@ export class User {
   username: string;
 
   @Column()
-  passwd: string;
+  password: string;
 
   @Column()
   name: string;
 
   @Column()
-  age: number; //age string -> number로 변경
+  age: number;
 
   @Column()
   job: string;
