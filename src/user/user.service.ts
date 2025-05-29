@@ -63,6 +63,7 @@ export class UserService {
   }
 
   async findUsername(username: string): Promise<User | null> {
+    console.log('(3번째 로그) DB 조회 시작 : ', username);
     return this.userRepository.findOne({ where: { username } });
   }
 }
