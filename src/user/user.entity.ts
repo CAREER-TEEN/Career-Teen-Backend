@@ -8,8 +8,6 @@ import {
 
 @Entity()
 export class User {
-  //클래스명 대문자 시작
-
   static readonly Role = {
     Mentor: 'mentor',
     Mentee: 'mentee',

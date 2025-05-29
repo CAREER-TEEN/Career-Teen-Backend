@@ -12,7 +12,7 @@ import { UserModule } from '../user/user.module';
   imports: [
     ConfigModule,
     UserModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }), // ✅ 기본 전략 설정
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -24,6 +24,6 @@ import { UserModule } from '../user/user.module';
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  exports: [AuthService, PassportModule, JwtModule], // ✅ 다른 모듈에서도 사용할 수 있도록 export
+  exports: [AuthService, PassportModule, JwtModule],
 })
 export class AuthModule {}

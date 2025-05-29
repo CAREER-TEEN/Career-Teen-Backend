@@ -18,12 +18,12 @@ import { ConfigModule } from '@nestjs/config';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: '071122', //나중에 git 설정 후 비밀번호 설정
+      password: '071122', //나중에 변경 예정정
       database: 'career_teen',
       entities: [User],
-      synchronize: true, //자동 생성 수정
+      synchronize: true,
     }),
-    TypeOrmModule.forFeature([User]), //user entity
+    TypeOrmModule.forFeature([User]),
     UserModule,
     AuthModule,
   ],

@@ -25,7 +25,7 @@ export class UserService {
   ) {}
 
   async createUser(input: CreateUserInput): Promise<User> {
-    console.log('회원가입 시도 데이터:', input);
+    console.log('회원가입 : ', input);
     try {
       const { username, password, name, age, job, resolution, role } = input;
 
@@ -46,7 +46,7 @@ export class UserService {
 
       return await this.userRepository.save(newUser);
     } catch (error) {
-      console.error('회원가입 오류:', error);
+      console.error('회원가입 오류 : ', error);
       throw new InternalServerErrorException('회원가입 중 오류 발생');
     }
   }
