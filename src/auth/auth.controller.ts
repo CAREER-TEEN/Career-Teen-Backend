@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginUserInput } from './dto/login.user.input';
 
 @Controller('auth')
-export class AuthController{
+export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')

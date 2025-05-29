@@ -1,9 +1,16 @@
 // CRLF -> LF로 변경 (CRLF는 종료구문에 오류 표시함)
 // spaces 2로 변경
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'; //npm install typeorm
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm'; //npm install typeorm
 
 @Entity()
-export class User{ //클래스명 대문자 시작
+export class User {
+  //클래스명 대문자 시작
 
   static readonly Role = {
     Mentor: 'mentor',
