@@ -2,6 +2,7 @@ import {
   Injectable,
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -25,6 +26,7 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  // 회원가입
   async createUser(input: CreateUserInput): Promise<User> {
     console.log('회원가입 : ', input);
     try {
@@ -54,16 +56,33 @@ export class UserService {
     }
   }
 
+  // 전체 사용자 조회
   async findAllUsers(): Promise<User[]> {
-    return await this.userRepository.find();
+    try {
+      return await this.userRepository.find();
+    } catch (error) {
+      console.error('findAllUsers error:', error);
+      throw new InternalServerErrorException('사용자 조회 중 오류 발생');
+    }
   }
 
-  async findUserById(id: number): Promise<User | null> {
-    return await this.userRepository.findOneBy({ id });
+  // 사용자 ID로 조회 (로그인 후 프로필용)
+  async findById(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
+  // 사용자 이름(username)으로 조회
   async findUsername(username: string): Promise<User | null> {
     console.log('(3번째 로그) DB 조회 시작 : ', username);
     return this.userRepository.findOne({ where: { username } });
+  }
+
+  // ID로 조회하는 다른 메서드가 있다면 통합 가능
+  async findUserById(id: number): Promise<User | null> {
+    return await this.userRepository.findOneBy({ id });
   }
 }
