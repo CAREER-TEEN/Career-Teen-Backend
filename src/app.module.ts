@@ -10,6 +10,8 @@ import { User } from './user/user.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt.auth.guard';
+import { BulletinModule } from './BulletinBoard/BulletinBoard.module';
+import { BulletinBoard } from './BulletinBoard/BulletinBoard.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,12 +25,13 @@ import { JwtAuthGuard } from './auth/jwt.auth.guard';
       username: 'postgres',
       password: '071122', // 나중에 변경 예정
       database: 'career_teen',
-      entities: [User],
+      entities: [User, BulletinBoard],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, BulletinBoard]),
     UserModule,
     AuthModule,
+    BulletinModule,
   ],
   controllers: [AppController],
   providers: [
