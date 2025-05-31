@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserInput } from './dto/update.user.input';
 
 interface CreateUserInput {
   username: string;
@@ -84,5 +85,30 @@ export class UserService {
   // ID로 조회하는 다른 메서드가 있다면 통합 가능
   async findUserById(id: number): Promise<User | null> {
     return await this.userRepository.findOneBy({ id });
+  }
+
+  //회원 정보 수정
+  async updateUser(id: number, input: UpdateUserInput): Promise<User> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException('해당 사용자를 찾을 수 없습니다.');
+    }
+
+    // 새 비밀번호를 받는다면 해싱해서 저장
+    if (input.password) {
+      input.password = await bcrypt.hash(input.password, 10);
+    }
+
+    Object.assign(user, input);
+    return await this.userRepository.save(user);
+  }
+
+  //회원 탈퇴
+  async deleteUser(id: number): Promise<void> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    }
+    await this.userRepository.remove(user);
   }
 }
