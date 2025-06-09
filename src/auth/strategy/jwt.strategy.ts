@@ -3,21 +3,19 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 
-interface JwtPayload {
-  sub: string;
+export interface JwtPayload {
+  sub: string; // userId
+  username: string;
   role: string;
-}
-
-interface EnvConfig {
-  JWT_SECRET: string;
 }
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly configService: ConfigService<EnvConfig>) {
+  constructor(private readonly configService: ConfigService) {
     const jwtSecret = configService.get<string>('JWT_SECRET');
-    if (typeof jwtSecret !== 'string') {
-      throw new Error('JWT_SECRET STRING ERROR');
+
+    if (!jwtSecret) {
+      throw new Error('JWT_SECRET ERROR');
     }
 
     super({
@@ -27,10 +25,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: JwtPayload): { username: string; role: string } {
-    return {
-      username: payload.sub,
+  async validate(
+    payload: JwtPayload,
+  ): Promise<{ userId: string; username: string; role: string }> {
+    return await Promise.resolve({
+      userId: payload.sub,
+      username: payload.username,
       role: payload.role,
-    };
+    });
   }
 }

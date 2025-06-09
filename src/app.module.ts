@@ -12,6 +12,9 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt.auth.guard';
 import { BulletinModule } from './BulletinBoard/BulletinBoard.module';
 import { BulletinBoard } from './BulletinBoard/BulletinBoard.entity';
+import { StudyGroup } from './StudyGroup/StudyGroup.entiy';
+import { StudyGroupModule } from './StudyGroup/StudyGroup.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -23,15 +26,15 @@ import { BulletinBoard } from './BulletinBoard/BulletinBoard.entity';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: '071122', // 나중에 변경 예정
+      password: '071122', // 나중에 변경
       database: 'career_teen',
-      entities: [User, BulletinBoard],
+      entities: [User, BulletinBoard, StudyGroup],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, BulletinBoard]),
     UserModule,
     AuthModule,
     BulletinModule,
+    StudyGroupModule,
   ],
   controllers: [AppController],
   providers: [
