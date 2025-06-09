@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Patch,
   Param,
   ParseIntPipe,
   Post,
@@ -14,7 +15,6 @@ import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { Request as ExpressRequest } from 'express';
 import { JwtPayload } from '../auth/jwt.interface';
 import { StudyGroup } from './StudyGroup.entiy';
-
 @Controller('study_groups')
 export class StudyGroupController {
   constructor(private readonly studyGroupService: StudyGroupService) {}
@@ -40,5 +40,13 @@ export class StudyGroupController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<StudyGroup | null> {
     return this.studyGroupService.findOne(id);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateData: Partial<StudyGroup>,
+  ): Promise<StudyGroup> {
+    return await this.studyGroupService.update(id, updateData);
   }
 }
