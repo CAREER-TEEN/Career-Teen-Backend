@@ -3,6 +3,7 @@ import {
   Controller,
   Post,
   Patch,
+  Delete,
   Param,
   ParseIntPipe,
   UseGuards,
@@ -37,5 +38,13 @@ export class BulletinController {
     @Body() updateDto: UpdateBulletinDto,
   ): Promise<BulletinBoard> {
     return this.bulletinService.update(id, updateDto);
+  }
+
+  // 게시글 삭제
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async removeBulletin(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.bulletinService.remove(id);
   }
 }

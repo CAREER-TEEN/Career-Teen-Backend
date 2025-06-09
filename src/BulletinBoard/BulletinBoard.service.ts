@@ -30,12 +30,18 @@ export class BulletinService {
   ): Promise<BulletinBoard> {
     const bulletin = await this.bulletinRepository.findOneBy({ id });
     if (!bulletin) {
-      throw new NotFoundException(
-        `게시글을 찾을 수 없습니다 (id ${id} 찾을 수 없음)`,
-      );
+      throw new NotFoundException(`게시글 ID ${id} 를 찾을 수 없습니다`);
     }
 
     Object.assign(bulletin, updateDto);
     return this.bulletinRepository.save(bulletin);
+  }
+
+  // 게시판 게시글 삭제
+  async remove(id: number): Promise<void> {
+    const result = await this.bulletinRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`게시글 ID ${id} 를 찾을 수 없습니다`);
+    }
   }
 }
