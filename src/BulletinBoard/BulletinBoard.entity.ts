@@ -10,6 +10,7 @@ export enum Category {
   benefit = '혜택',
   Company = '취업',
   career = '진로·미래',
+  Youth = '청년',
 }
 
 @Entity()
