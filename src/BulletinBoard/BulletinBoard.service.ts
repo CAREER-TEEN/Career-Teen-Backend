@@ -44,4 +44,28 @@ export class BulletinService {
       throw new NotFoundException(`게시글 ID ${id} 를 찾을 수 없습니다`);
     }
   }
+
+  // 인기 게시글 조회
+  async getRecommendedPosts(): Promise<BulletinBoard[]> {
+    return this.bulletinRepository.find({
+      order: { view: 'DESC' },
+    });
+  }
+
+  // 최신 게시글 조회
+  async getLatestPosts(): Promise<BulletinBoard[]> {
+    return this.bulletinRepository.find({
+      order: { createdAt: 'DESC' },
+      take: 10,
+    });
+  }
+
+  // 조건 게시글 조회
+  async getPostsByCategory(category: string): Promise<BulletinBoard[]> {
+    return this.bulletinRepository
+      .createQueryBuilder('board')
+      .where(':category = ANY(board.category)', { category })
+      .orderBy('board.createdAt', 'DESC')
+      .getMany();
+  }
 }

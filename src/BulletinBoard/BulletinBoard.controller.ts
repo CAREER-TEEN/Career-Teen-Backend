@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Query,
   Post,
   Patch,
   Delete,
@@ -46,5 +48,25 @@ export class BulletinController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async removeBulletin(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.bulletinService.remove(id);
+  }
+
+  // 인기 게시글 조회 (조회수 순으로로 정렬)
+  @Get('recommended')
+  getRecommendedPosts(): Promise<BulletinBoard[]> {
+    return this.bulletinService.getRecommendedPosts();
+  }
+
+  // 최신 게시글 조회 (게시글 생성 순으로 정렬)
+  @Get('latest')
+  getLatestPosts(): Promise<BulletinBoard[]> {
+    return this.bulletinService.getLatestPosts();
+  }
+
+  // 조건별 게시글 조회 (카테고리 조건)
+  @Get('category')
+  getPostsByCategory(
+    @Query('category') category: string,
+  ): Promise<BulletinBoard[]> {
+    return this.bulletinService.getPostsByCategory(category);
   }
 }
