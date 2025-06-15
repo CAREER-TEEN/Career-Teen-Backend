@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { StudyGroupController } from './StudyGroup.controller';
 import { StudyGroupService } from './StudyGroup.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { StudyGroup } from './StudyGroup.entiy';
+import { StudyGroup } from './StudyGroup.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([StudyGroup])],

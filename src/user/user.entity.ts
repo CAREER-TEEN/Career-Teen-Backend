@@ -1,4 +1,3 @@
-// user.entity.ts
 import {
   Entity,
   Column,
@@ -8,6 +7,8 @@ import {
   OneToMany,
 } from 'typeorm';
 import { BulletinBoard } from '../BulletinBoard/BulletinBoard.entity';
+import { StudyGroup } from '../StudyGroup/StudyGroup.entity';
+import { ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
 export class User {
@@ -52,6 +53,16 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  studyGroup: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  bulletinBoard: string;
+
   @OneToMany(() => BulletinBoard, (board) => board.user)
   boards: BulletinBoard[];
+
+  @ManyToMany(() => StudyGroup, (group) => group.members)
+  @JoinTable()
+  joinedGroups: StudyGroup[];
 }

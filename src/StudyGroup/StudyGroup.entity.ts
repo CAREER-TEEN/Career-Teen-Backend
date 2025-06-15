@@ -4,6 +4,8 @@ import {
   Column,
   CreateDateColumn,
 } from 'typeorm';
+import { ManyToMany } from 'typeorm';
+import { User } from '../User/user.entity';
 
 @Entity()
 export class StudyGroup {
@@ -21,6 +23,9 @@ export class StudyGroup {
 
   @Column()
   personnel: number;
+
+  @ManyToMany(() => User, (user) => user.joinedGroups)
+  members: User[];
 
   @Column({ length: 1000 })
   grouptext: string;

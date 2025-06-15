@@ -14,7 +14,8 @@ import { CreateStudyGroupDto } from './dto/create.StudyGroup.input';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { Request as ExpressRequest } from 'express';
 import { JwtPayload } from '../auth/jwt.interface';
-import { StudyGroup } from './StudyGroup.entiy';
+import { StudyGroup } from './StudyGroup.entity';
+
 @Controller('study_groups')
 export class StudyGroupController {
   constructor(private readonly studyGroupService: StudyGroupService) {}
@@ -25,7 +26,7 @@ export class StudyGroupController {
     @Body() createDto: CreateStudyGroupDto,
     @Request() req: ExpressRequest,
   ) {
-    const user = req.user as JwtPayload; //JWT를 이용해 user정보를 가져와 host에
+    const user = req.user as JwtPayload;
     const userId = user.userId;
     return this.studyGroupService.create(createDto, userId);
   }
@@ -48,5 +49,15 @@ export class StudyGroupController {
     @Body() updateData: Partial<StudyGroup>,
   ): Promise<StudyGroup> {
     return await this.studyGroupService.update(id, updateData);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('join/:groupId')
+  async joinGroup(
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Request() req: ExpressRequest,
+  ) {
+    const userId = Number((req.user as JwtPayload).userId);
+    return this.studyGroupService.joinStudyGroup(groupId, userId);
   }
 }

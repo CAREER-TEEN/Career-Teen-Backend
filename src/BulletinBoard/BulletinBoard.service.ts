@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { BulletinBoard } from './BulletinBoard.entity';
 import { CreateBulletinInput } from './dto/create.BulletinBoard.input';
 import { UpdateBulletinDto } from './dto/update.BulletinBoard';
-import { User } from '../user/user.entity';
+import { User } from '../User/user.entity';
 
 @Injectable()
 export class BulletinService {

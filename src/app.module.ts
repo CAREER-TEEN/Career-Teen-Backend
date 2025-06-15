@@ -6,13 +6,13 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
-import { User } from './user/user.entity';
-import { UserModule } from './user/user.module';
+import { User } from './User/user.entity';
+import { UserModule } from './User/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt.auth.guard';
 import { BulletinModule } from './BulletinBoard/BulletinBoard.module';
 import { BulletinBoard } from './BulletinBoard/BulletinBoard.entity';
-import { StudyGroup } from './StudyGroup/StudyGroup.entiy';
+import { StudyGroup } from './StudyGroup/StudyGroup.entity';
 import { StudyGroupModule } from './StudyGroup/StudyGroup.module';
 
 @Module({

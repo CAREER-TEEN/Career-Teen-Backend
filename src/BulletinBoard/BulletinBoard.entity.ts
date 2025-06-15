@@ -6,7 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+import { User } from '../User/user.entity';
 
 export enum Category {
   study = '시험·자격증',
