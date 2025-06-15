@@ -11,7 +11,9 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { BulletinService } from './BulletinBoard.service';
 import { CreateBulletinInput } from './dto/create.BulletinBoard.input';
 import { UpdateBulletinDto } from './dto/update.BulletinBoard';
@@ -28,8 +30,10 @@ export class BulletinController {
   @HttpCode(HttpStatus.CREATED)
   async createBulletin(
     @Body() input: CreateBulletinInput,
+    @Req() req: Request & { user: { userId: number } },
   ): Promise<BulletinBoard> {
-    return this.bulletinService.create(input);
+    const userId = req.user.userId;
+    return this.bulletinService.create(input, userId);
   }
 
   // 게시글 수정
