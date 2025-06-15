@@ -1,10 +1,13 @@
+// user.entity.ts
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { BulletinBoard } from '../BulletinBoard/BulletinBoard.entity';
 
 @Entity()
 export class User {
@@ -37,9 +40,18 @@ export class User {
   @Column({ type: 'enum', enum: User.Role })
   role: (typeof User.Role)[keyof typeof User.Role];
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  introduce: string;
+
+  @Column({ type: 'jsonb', nullable: true })
+  career: { date: string; description: string }[];
+
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => BulletinBoard, (board) => board.user)
+  boards: BulletinBoard[];
 }

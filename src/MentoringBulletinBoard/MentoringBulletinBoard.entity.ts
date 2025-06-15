@@ -3,21 +3,18 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  ManyToOne,
-  JoinColumn,
 } from 'typeorm';
-import { User } from '../user/user.entity';
 
 export enum Category {
-  study = '시험·자격증',
-  benefit = '혜택',
-  Company = '취업',
-  career = '진로·미래',
-  Youth = '청년',
+  study = '사무직',
+  benefit = 'IT',
+  Company = '디자인',
+  career = '요식',
+  Youth = '마케팅',
 }
 
 @Entity()
-export class BulletinBoard {
+export class MentoringBulletinBoard {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -41,8 +38,4 @@ export class BulletinBoard {
 
   @Column({ default: 0 })
   view: number;
-
-  @ManyToOne(() => User, (user) => user.boards, { nullable: true })
-  @JoinColumn({ name: 'user_id' })
-  user: User;
 }
