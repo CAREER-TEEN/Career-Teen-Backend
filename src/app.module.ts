@@ -23,11 +23,11 @@ import { StudyGroupModule } from './StudyGroup/StudyGroup.module';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '071122', // 나중에 변경
-      database: 'career_teen',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [User, BulletinBoard, StudyGroup],
       synchronize: true,
     }),
