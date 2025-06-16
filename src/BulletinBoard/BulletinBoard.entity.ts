@@ -7,6 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from '../User/user.entity';
+import { Comment } from '../comment/comment.entity';
 
 export enum Category {
   study = '시험·자격증',
@@ -45,4 +46,7 @@ export class BulletinBoard {
   @ManyToOne(() => User, (user) => user.boards, { nullable: true })
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToMany(() => Comment, (comment) => comment.board)
+  comments: Comment[];
 }

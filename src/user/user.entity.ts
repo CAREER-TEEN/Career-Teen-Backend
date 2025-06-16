@@ -9,6 +9,7 @@ import {
 import { BulletinBoard } from '../BulletinBoard/BulletinBoard.entity';
 import { StudyGroup } from '../StudyGroup/StudyGroup.entity';
 import { ManyToMany, JoinTable } from 'typeorm';
+import { Comment } from '../comment/comment.entity';
 
 @Entity()
 export class User {
@@ -68,4 +69,10 @@ export class User {
 
   @Column({ type: 'int', nullable: true })
   person: number;
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
+
+  @Column({ type: 'varchar', length: 300, nullable: true })
+  img: string;
 }
