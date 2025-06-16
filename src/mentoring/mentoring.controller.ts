@@ -1,8 +1,16 @@
 // src/mentoring/mentoring.controller.ts
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import {
+  Body,
+  Post,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { MentoringService } from './mentoring.service';
 import { mentoringSummary } from './dto/mentoring.summary';
 import { mentoringDetail } from './dto/mentoring.detail';
+import { MentoringApply } from './dto/mentoring.apply';
 @Controller('mentoring')
 export class MentoringController {
   constructor(private readonly mentoringService: MentoringService) {}
@@ -17,5 +25,10 @@ export class MentoringController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<mentoringDetail> {
     return this.mentoringService.findMentorDetail(id);
+  }
+
+  @Post('apply')
+  async applyMentoring(@Body() dto: MentoringApply): Promise<string> {
+    return this.mentoringService.applyMentoring(dto);
   }
 }

@@ -65,4 +65,7 @@ export class User {
   @ManyToMany(() => StudyGroup, (group) => group.members)
   @JoinTable()
   joinedGroups: StudyGroup[];
+
+  @Column({ type: 'int', nullable: true })
+  person: number;
 }
