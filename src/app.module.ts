@@ -14,6 +14,7 @@ import { BulletinModule } from './BulletinBoard/BulletinBoard.module';
 import { BulletinBoard } from './BulletinBoard/BulletinBoard.entity';
 import { StudyGroup } from './StudyGroup/StudyGroup.entity';
 import { StudyGroupModule } from './StudyGroup/StudyGroup.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { StudyGroupModule } from './StudyGroup/StudyGroup.module';
     AuthModule,
     BulletinModule,
     StudyGroupModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [
