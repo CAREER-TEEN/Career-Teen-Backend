@@ -17,7 +17,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     if (
       (url === '/auth/login' && method === 'POST') ||
-      (url === '/users' && method === 'POST')
+      (url === '/users' && method === 'POST') ||
+      (url === '/' && method === 'GET')
     ) {
       console.log('[JwtAuthGuard] 인증 없이 접근 허용됨');
       return true;
