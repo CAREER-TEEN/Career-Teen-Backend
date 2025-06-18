@@ -6,10 +6,10 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { BulletinBoard } from '../BulletinBoard/BulletinBoard.entity';
-import { StudyGroup } from '../StudyGroup/StudyGroup.entity';
+import { BulletinBoard } from '../src/BulletinBoard/BulletinBoard.entity';
+import { StudyGroup } from '../src/StudyGroup/StudyGroup.entity';
 import { ManyToMany, JoinTable } from 'typeorm';
-import { Comment } from '../comment/comment.entity';
+import { Comment } from '../src/comment/comment.entity';
 
 @Entity()
 export class User {
