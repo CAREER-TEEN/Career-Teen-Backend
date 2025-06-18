@@ -8,13 +8,15 @@ import { AppService } from './app.service';
 
 import { User } from './User/user.entity';
 import { UserModule } from './User/user.module';
+
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt.auth.guard';
+
 import { BulletinModule } from './BulletinBoard/BulletinBoard.module';
 import { BulletinBoard } from './BulletinBoard/BulletinBoard.entity';
+
 import { StudyGroup } from './StudyGroup/StudyGroup.entity';
 import { StudyGroupModule } from './StudyGroup/StudyGroup.module';
-import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -24,19 +26,17 @@ import { ChatModule } from './chat/chat.module';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '071122', // 나중에 변경
-      database: 'career_teen',
+      url: process.env.DATABASE_URL,
       entities: [User, BulletinBoard, StudyGroup],
-      synchronize: true,
+      synchronize: false,
+      logging: true,
+      retryAttempts: 3,
+      retryDelay: 30000,
     }),
     UserModule,
     AuthModule,
     BulletinModule,
     StudyGroupModule,
-    ChatModule,
   ],
   controllers: [AppController],
   providers: [

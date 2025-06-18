@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../User/user.entity';
 import { Comment } from '../comment/comment.entity';
@@ -47,6 +48,6 @@ export class BulletinBoard {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.board)
+  @OneToMany(() => Comment, (comment: Comment) => comment.board)
   comments: Comment[];
 }
