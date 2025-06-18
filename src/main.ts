@@ -6,7 +6,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['*'], //이거 프론트 도메인 넣는거니 이케 해야겠지 지금은?
+    origin: [
+      'https://careerteen-moblie-front-gowtri4nk-soom4478s-projects.vercel.app/',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
