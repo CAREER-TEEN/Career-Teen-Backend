@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
   MentoringBulletinBoard,
-  Category,
+  MentoringCategory,
 } from './MentoringBulletinBoard.entity';
 
 @Injectable()
@@ -13,7 +13,9 @@ export class MentoringBulletinBoardService {
     private boardRepository: Repository<MentoringBulletinBoard>,
   ) {}
 
-  async findByCategory(category: Category): Promise<MentoringBulletinBoard[]> {
+  async findByCategory(
+    category: MentoringCategory,
+  ): Promise<MentoringBulletinBoard[]> {
     return this.boardRepository.find({
       where: { category },
       order: { createdAt: 'DESC' },

@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { MentoringBulletinBoardService } from './MentoringBulletinBoard.service';
-import { Category } from './MentoringBulletinBoard.entity';
+import { MentoringCategory } from './MentoringBulletinBoard.entity';
 
 @Controller('mentoring-board')
 export class MentoringBulletinBoardController {
@@ -12,7 +12,7 @@ export class MentoringBulletinBoardController {
   }
 
   @Get('category')
-  async getByCategory(@Query('type') type: Category) {
+  async getByCategory(@Query('type') type: MentoringCategory) {
     return this.boardService.findByCategory(type);
   }
 }

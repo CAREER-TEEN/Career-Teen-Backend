@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-export enum Category {
+export enum MentoringCategory {
   study = '사무직',
   benefit = 'IT',
   Company = '디자인',
@@ -20,9 +20,9 @@ export class MentoringBulletinBoard {
 
   @Column({
     type: 'enum',
-    enum: Category,
+    enum: MentoringCategory,
   })
-  category: Category;
+  category: MentoringCategory;
 
   @Column({ length: 100 })
   title: string;
