@@ -8,6 +8,8 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'https://careerteen-moblie-front-gowtri4nk-soom4478s-projects.vercel.app/',
+      'https://*.vercel.app',
+      'http://localhost:3000',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
