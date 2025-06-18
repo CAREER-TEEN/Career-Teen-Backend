@@ -9,6 +9,7 @@ async function bootstrap() {
   console.log('DB_USERNAME:', process.env.DB_USERNAME);
   console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
   console.log('DB_NAME:', process.env.DB_NAME);
+  console.log('JWT:', process.env.JWT_SECRET);
   await app.listen(3000);
 }
 void bootstrap();
