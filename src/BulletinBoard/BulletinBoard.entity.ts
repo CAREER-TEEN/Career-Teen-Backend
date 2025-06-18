@@ -7,7 +7,7 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { User } from '../User/user.entity';
+import { User } from '../../tempUser/user.entity';
 import { Comment } from '../comment/comment.entity';
 
 export enum Category {

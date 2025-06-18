@@ -5,7 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
 } from 'typeorm';
-import { User } from '../User/user.entity';
+import { User } from '../../tempUser/user.entity';
 import { BulletinBoard } from '../BulletinBoard/BulletinBoard.entity';
 
 @Entity()

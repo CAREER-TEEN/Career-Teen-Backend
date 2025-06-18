@@ -3,7 +3,7 @@ import { StudyGroupController } from './StudyGroup.controller';
 import { StudyGroupService } from './StudyGroup.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { StudyGroup } from './StudyGroup.entity';
-import { UserModule } from '../User/user.module';
+import { UserModule } from '../../tempUser/user.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([StudyGroup]), UserModule],

@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../User/user.entity';
+import { User } from '../../tempUser/user.entity';
 import { Repository } from 'typeorm';
 import { mentoringSummary } from './dto/mentoring.summary';
 import { mentoringDetail } from './dto/mentoring.detail';

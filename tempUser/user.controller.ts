@@ -9,10 +9,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { UserService } from '../User/user.service';
+import { UserService } from './user.service';
 import { CreateUserInput } from './dto/create.user.input';
-import { User } from '../User/user.entity';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { User } from './user.entity';
+import { JwtAuthGuard } from '../src/auth/jwt.auth.guard';
 import { UpdateUserInput } from './dto/update.user.input';
 
 interface JwtPayload {

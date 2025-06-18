@@ -4,7 +4,7 @@ import { Comment } from './comment.entity';
 import { Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/create.comment.input';
 import { CommentResponseDto } from './dto/response.comment';
-import { User } from '../User/user.entity';
+import { User } from '../../tempUser/user.entity';
 import { BulletinBoard } from '../BulletinBoard/BulletinBoard.entity';
 
 @Injectable()
