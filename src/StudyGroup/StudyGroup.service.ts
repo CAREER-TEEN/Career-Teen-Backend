@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StudyGroup } from './StudyGroup.entity';
-import { User } from '../User/user.entity';
+import { User } from '../../tempUser/user.entity';
 import { CreateStudyGroupDto } from './dto/create.StudyGroup.input';
 
 @Injectable()

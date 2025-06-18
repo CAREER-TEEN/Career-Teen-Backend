@@ -2,7 +2,7 @@
 // import { ChatService } from './chat.service';
 // import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 // import { GetUser } from '../auth/getUser';
-// import { User } from '../User/user.entity';
+// import { User } from '../tempUser/user.entity';
 
 // @Controller('chat')
 // export class ChatController {
