@@ -9,6 +9,6 @@ async function bootstrap() {
   console.log('DB_USERNAME:', process.env.DB_USERNAME);
   console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
   console.log('DB_NAME:', process.env.DB_NAME);
-  await app.listen(process.env.PORT ?? 5432);
+  await app.listen(3000);
 }
 void bootstrap();

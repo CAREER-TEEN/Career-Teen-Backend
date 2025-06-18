@@ -54,10 +54,15 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
+  @Column({ name: 'studygroup', type: 'varchar', length: 50, nullable: true })
   studyGroup: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
+  @Column({
+    name: 'bulletinboard',
+    type: 'varchar',
+    length: 100,
+    nullable: true,
+  })
   bulletinBoard: string;
 
   @OneToMany(() => BulletinBoard, (board) => board.user)
