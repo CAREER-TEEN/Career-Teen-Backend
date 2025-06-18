@@ -12,7 +12,7 @@ async function bootstrap() {
       callback: (err: Error | null, allow?: boolean) => void,
     ): void => {
       const allowedOrigins = [
-        'https://careerteen-moblie-front.vercel.app',
+        'https://careerteen.vercel.app',
         'http://localhost:3000',
       ];
 
