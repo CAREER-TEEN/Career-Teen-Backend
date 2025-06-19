@@ -18,6 +18,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (
       (url === '/auth/login' && method === 'POST') ||
       (url === '/users' && method === 'POST') ||
+      (url === '/bulletins' && method === 'POST') ||
+      (url.startsWith('/bulletins/') && method === 'PATCH') ||
+      (url.startsWith('/bulletins/') && method === 'DELETE') ||
+      (url === '/bulletins/recommended' && method === 'GET') ||
+      (url === '/bulletins/latest' && method === 'GET') ||
+      (url.startsWith('/bulletins/category') && method === 'GET') ||
       (url === '/' && method === 'GET')
     ) {
       console.log('[JwtAuthGuard] 인증 접근 허용됨');
