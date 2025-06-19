@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -26,10 +27,9 @@ export class BulletinService {
   ): Promise<BulletinBoard> {
     console.log('create() 호출됨, userId:', userId);
     const user = await this.userRepository.findOneBy({ id: userId });
-    console.log('찾은 유저:', user);
-    if (!user) throw new NotFoundException('사용자 찾을 수 없음');
 
-    console.log('create input:', input);
+    if (!user) throw new NotFoundException('사용자를 찾을 수 없습니다.');
+
     try {
       const bulletin = this.bulletinRepository.create({
         ...input,
@@ -46,57 +46,130 @@ export class BulletinService {
     }
   }
 
-  // 이하 기존 코드 유지
-
   async update(
     id: number,
     updateDto: UpdateBulletinDto,
   ): Promise<BulletinBoard> {
-    const bulletin = await this.bulletinRepository.findOneBy({ id });
-    if (!bulletin) {
-      throw new NotFoundException(`게시글 ID ${id} 를 찾을 수 없습니다`);
-    }
+    try {
+      const bulletin = await this.bulletinRepository.findOneBy({ id });
 
-    Object.assign(bulletin, updateDto);
-    return this.bulletinRepository.save(bulletin);
+      if (!bulletin) {
+        throw new NotFoundException(`게시글 ID ${id}를 찾을 수 없습니다.`);
+      }
+
+      Object.assign(bulletin, updateDto);
+      return await this.bulletinRepository.save(bulletin);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`게시글 수정 오류 (ID: ${id}):`, error.message);
+      } else {
+        console.error(`게시글 수정 중 알 수 없는 오류 (ID: ${id}):`, error);
+      }
+      throw new InternalServerErrorException('게시글 수정 중 오류 발생');
+    }
   }
 
   async remove(id: number): Promise<void> {
-    const result = await this.bulletinRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`게시글 ID ${id} 를 찾을 수 없습니다`);
+    try {
+      const result = await this.bulletinRepository.delete(id);
+      if (result.affected === 0) {
+        throw new NotFoundException(`게시글 ID ${id}를 찾을 수 없습니다.`);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`게시글 삭제 오류 (ID: ${id}):`, error.message);
+      } else {
+        console.error(`게시글 삭제 중 알 수 없는 오류 (ID: ${id}):`, error);
+      }
+      throw new InternalServerErrorException('게시글 삭제 중 오류 발생');
     }
   }
 
   async getRecommendedPosts(): Promise<BulletinBoard[]> {
-    return this.bulletinRepository.find({
-      order: { view: 'DESC' },
-    });
+    try {
+      return await this.bulletinRepository.find({
+        order: { view: 'DESC' },
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('인기 게시글 조회 오류:', error.message);
+      } else {
+        console.error('인기 게시글 조회 알 수 없는 오류:', error);
+      }
+      throw new InternalServerErrorException('인기 게시글 조회 실패');
+    }
   }
 
   async getLatestPosts(): Promise<BulletinBoard[]> {
-    return this.bulletinRepository.find({
-      order: { createdAt: 'DESC' },
-      take: 10,
-    });
+    try {
+      return await this.bulletinRepository.find({
+        order: { createdAt: 'DESC' },
+        take: 10,
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('최신 게시글 조회 오류:', error.message);
+      } else {
+        console.error('최신 게시글 조회 알 수 없는 오류:', error);
+      }
+      throw new InternalServerErrorException('최신 게시글 조회 실패');
+    }
   }
 
   async getPostWithAuthor(id: number): Promise<BulletinBoard> {
-    const post = await this.bulletinRepository.findOne({
-      where: { id },
-      relations: ['user'],
-    });
+    try {
+      const post = await this.bulletinRepository.findOne({
+        where: { id },
+        relations: ['user'],
+      });
 
-    if (!post) throw new NotFoundException('게시글을 찾을 수 없습니다');
+      if (!post) {
+        throw new NotFoundException('게시글을 찾을 수 없습니다.');
+      }
 
-    return post;
+      return post;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(`게시글 상세 조회 오류 (ID: ${id}):`, error.message);
+      } else {
+        console.error(`게시글 상세 조회 알 수 없는 오류 (ID: ${id}):`, error);
+      }
+      throw new InternalServerErrorException('게시글 상세 조회 실패');
+    }
   }
 
   async getPostsByCategory(category: string): Promise<BulletinBoard[]> {
-    return this.bulletinRepository
-      .createQueryBuilder('board')
-      .where(':category = ANY(board.category)', { category })
-      .orderBy('board.createdAt', 'DESC')
-      .getMany();
+    if (!category) {
+      throw new BadRequestException('카테고리를 지정해주세요.');
+    }
+
+    try {
+      const posts = await this.bulletinRepository
+        .createQueryBuilder('board')
+        .where(':category = ANY(board.category)', { category })
+        .orderBy('board.createdAt', 'DESC')
+        .getMany();
+
+      if (posts.length === 0) {
+        throw new NotFoundException(
+          `카테고리 "${category}"에 해당하는 게시글이 없습니다.`,
+        );
+      }
+
+      return posts;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(
+          `카테고리 게시글 조회 오류 (category: ${category}):`,
+          error.message,
+        );
+      } else {
+        console.error(
+          `카테고리 게시글 조회 알 수 없는 오류 (category: ${category}):`,
+          error,
+        );
+      }
+      throw new InternalServerErrorException('카테고리별 게시글 조회 실패');
+    }
   }
 }

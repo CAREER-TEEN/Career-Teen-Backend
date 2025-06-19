@@ -12,6 +12,7 @@ import {
   HttpCode,
   HttpStatus,
   Req,
+  BadRequestException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { BulletinService } from './BulletinBoard.service';
@@ -30,10 +31,13 @@ export class BulletinController {
   @HttpCode(HttpStatus.CREATED)
   async createBulletin(
     @Body() input: CreateBulletinInput,
-    @Req() req: Request & { user: { userId: number } },
+    @Req() req: Request & { user?: { userId: number } },
   ): Promise<BulletinBoard> {
-    const userId = req.user.userId;
-    console.log('req에 userid:', userId);
+    const userId = req.user?.userId;
+    if (!userId) {
+      throw new BadRequestException('userId가 요청에서 확인되지 않습니다.');
+    }
+
     return this.bulletinService.create(input, userId);
   }
 
@@ -55,23 +59,26 @@ export class BulletinController {
     return this.bulletinService.remove(id);
   }
 
-  // 인기 게시글 조회 (조회수 순으로로 정렬)
+  // 인기 게시글 조회 (조회수 순으로 정렬)
   @Get('recommended')
   getRecommendedPosts(): Promise<BulletinBoard[]> {
     return this.bulletinService.getRecommendedPosts();
   }
 
-  // 최신 게시글 조회 (게시글 생성 순으로 정렬)
+  // 최신 게시글 조회 (작성일 순 정렬)
   @Get('latest')
   getLatestPosts(): Promise<BulletinBoard[]> {
     return this.bulletinService.getLatestPosts();
   }
 
-  // 조건별 게시글 조회 (카테고리 조건)
+  // 조건별 게시글 조회 (카테고리 기준)
   @Get('category')
   getPostsByCategory(
     @Query('category') category: string,
   ): Promise<BulletinBoard[]> {
+    if (!category) {
+      throw new BadRequestException('category 쿼리 파라미터가 필요합니다.');
+    }
     return this.bulletinService.getPostsByCategory(category);
   }
 }
