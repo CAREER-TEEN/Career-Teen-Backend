@@ -24,9 +24,12 @@ export class BulletinService {
     input: CreateBulletinInput,
     userId: number,
   ): Promise<BulletinBoard> {
+    console.log('create() 호출됨, userId:', userId);
     const user = await this.userRepository.findOneBy({ id: userId });
+    console.log('찾은 유저:', user);
     if (!user) throw new NotFoundException('사용자 찾을 수 없음');
 
+    console.log('create input:', input);
     try {
       const bulletin = this.bulletinRepository.create({
         ...input,

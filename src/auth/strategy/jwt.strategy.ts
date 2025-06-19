@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 
 export interface JwtPayload {
-  sub: string; // userId
+  sub: string;
   username: string;
   role: string;
 }
@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const jwtSecret = configService.get<string>('JWT_SECRET');
 
     if (!jwtSecret) {
-      throw new Error('JWT_SECRET ERROR');
+      throw new Error('JWT ENV 에러');
     }
 
     super({
@@ -30,6 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     username: string;
     role: string;
   } {
+    console.log('payload:', payload);
     return {
       userId: Number(payload.sub),
       username: payload.username,

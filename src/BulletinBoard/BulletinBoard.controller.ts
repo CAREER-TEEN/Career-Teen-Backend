@@ -25,14 +25,15 @@ export class BulletinController {
   constructor(private readonly bulletinService: BulletinService) {}
 
   // 게시글 생성
-  @UseGuards(JwtAuthGuard)
   @Post()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   async createBulletin(
     @Body() input: CreateBulletinInput,
     @Req() req: Request & { user: { userId: number } },
   ): Promise<BulletinBoard> {
     const userId = req.user.userId;
+    console.log('req에 userid:', userId);
     return this.bulletinService.create(input, userId);
   }
 
