@@ -23,16 +23,18 @@ export class StudyGroupService {
     userId: number,
   ): Promise<StudyGroup> {
     try {
-      const host = await this.userRepository.findOne({ where: { id: userId } });
-      if (!host) {
+      const hostUser = await this.userRepository.findOne({
+        where: { id: userId },
+      });
+      if (!hostUser) {
         throw new NotFoundException('호스트 유저를 찾을 수 없습니다');
       }
 
       const newGroup = this.studyGroupRepository.create({
         ...createDto,
-        host,
+        host: hostUser,
         personnel: 1,
-        members: [host],
+        members: [hostUser],
       });
 
       return await this.studyGroupRepository.save(newGroup);
@@ -44,14 +46,14 @@ export class StudyGroupService {
 
   async findAll(): Promise<StudyGroup[]> {
     return this.studyGroupRepository.find({
-      relations: ['host', 'members'],
+      relations: ['members'], // host는 relation 아님
     });
   }
 
   async findOne(id: number): Promise<StudyGroup | null> {
     const group = await this.studyGroupRepository.findOne({
       where: { id },
-      relations: ['host', 'members'],
+      relations: ['members'], // host는 relation 아님
     });
     if (!group) {
       throw new NotFoundException(`스터디그룹 ID ${id} 를 찾을 수 없습니다`);
@@ -86,6 +88,10 @@ export class StudyGroupService {
         throw new NotFoundException(
           '사용자 또는 스터디그룹을 찾을 수 없습니다',
         );
+      }
+
+      if (!group.members) {
+        group.members = [];
       }
 
       // 중복 가입 방지
