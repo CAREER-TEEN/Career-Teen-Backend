@@ -68,6 +68,9 @@ export class User {
   @OneToMany(() => BulletinBoard, (board) => board.user)
   boards: BulletinBoard[];
 
+  @OneToMany(() => StudyGroup, (studyGroup) => studyGroup.host)
+  hostingGroups: StudyGroup[];
+
   @ManyToMany(() => StudyGroup, (group) => group.members)
   @JoinTable()
   joinedGroups: StudyGroup[];

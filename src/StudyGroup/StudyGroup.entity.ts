@@ -3,8 +3,11 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToMany,
+  ManyToOne,
+  JoinColumn,
+  JoinTable,
 } from 'typeorm';
-import { ManyToMany } from 'typeorm';
 import { User } from '../../tempUser/user.entity';
 
 @Entity()
@@ -15,8 +18,9 @@ export class StudyGroup {
   @Column({ length: 50 })
   groupname: string;
 
-  @Column({ length: 20 })
-  host: string;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'hostId' })
+  host: User;
 
   @Column({ length: 20 })
   place: string;
@@ -25,6 +29,7 @@ export class StudyGroup {
   personnel: number;
 
   @ManyToMany(() => User, (user) => user.joinedGroups)
+  @JoinTable()
   members: User[];
 
   @Column({ length: 1000 })
@@ -34,5 +39,5 @@ export class StudyGroup {
   img: string;
 
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 }

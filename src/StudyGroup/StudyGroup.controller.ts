@@ -27,7 +27,7 @@ export class StudyGroupController {
     @Request() req: ExpressRequest,
   ) {
     const user = req.user as JwtPayload;
-    const userId = user.userId;
+    const userId = Number(user.userId);
     return this.studyGroupService.create(createDto, userId);
   }
 

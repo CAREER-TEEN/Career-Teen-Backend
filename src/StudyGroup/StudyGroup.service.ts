@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { StudyGroup } from './StudyGroup.entity';
 import { User } from '../../tempUser/user.entity';
 import { CreateStudyGroupDto } from './dto/create.StudyGroup.input';
+
 @Injectable()
 export class StudyGroupService {
   constructor(
@@ -19,14 +20,19 @@ export class StudyGroupService {
 
   async create(
     createDto: CreateStudyGroupDto,
-    userId: string,
+    userId: number,
   ): Promise<StudyGroup> {
     try {
+      const host = await this.userRepository.findOne({ where: { id: userId } });
+      if (!host) {
+        throw new NotFoundException('호스트 유저를 찾을 수 없습니다');
+      }
+
       const newGroup = this.studyGroupRepository.create({
         ...createDto,
-        host: userId,
+        host,
         personnel: 1,
-        members: [],
+        members: [host],
       });
 
       return await this.studyGroupRepository.save(newGroup);
@@ -37,11 +43,16 @@ export class StudyGroupService {
   }
 
   async findAll(): Promise<StudyGroup[]> {
-    return this.studyGroupRepository.find();
+    return this.studyGroupRepository.find({
+      relations: ['host', 'members'],
+    });
   }
 
   async findOne(id: number): Promise<StudyGroup | null> {
-    const group = await this.studyGroupRepository.findOne({ where: { id } });
+    const group = await this.studyGroupRepository.findOne({
+      where: { id },
+      relations: ['host', 'members'],
+    });
     if (!group) {
       throw new NotFoundException(`스터디그룹 ID ${id} 를 찾을 수 없습니다`);
     }
@@ -56,16 +67,19 @@ export class StudyGroupService {
     if (!group) {
       throw new NotFoundException(`스터디그룹 ID ${id} 를 찾을 수 없습니다`);
     }
-
     const updated = this.studyGroupRepository.merge(group, updateData);
     return await this.studyGroupRepository.save(updated);
   }
 
-  async joinStudyGroup(groupId: number, userId: number): Promise<User> {
+  async joinStudyGroup(groupId: number, userId: number): Promise<StudyGroup> {
     try {
-      const user = await this.userRepository.findOne({ where: { id: userId } });
+      const user = await this.userRepository.findOne({
+        where: { id: userId },
+        relations: ['joinedGroups'],
+      });
       const group = await this.studyGroupRepository.findOne({
         where: { id: groupId },
+        relations: ['members'],
       });
 
       if (!user || !group) {
@@ -74,16 +88,16 @@ export class StudyGroupService {
         );
       }
 
-      if (!group.groupname || group.groupname.length > 50) {
-        throw new InternalServerErrorException('유효하지 않은 그룹명입니다');
+      // 중복 가입 방지
+      if (group.members.some((member) => member.id === user.id)) {
+        throw new InternalServerErrorException('이미 가입한 그룹입니다');
       }
 
-      user.studyGroup = group.groupname;
-
+      group.members.push(user);
       group.personnel = (group.personnel ?? 0) + 1;
 
       await this.studyGroupRepository.save(group);
-      return await this.userRepository.save(user);
+      return group;
     } catch (error) {
       console.error('스터디 그룹 참여 중 오류:', error);
       throw new InternalServerErrorException('스터디 그룹 참여 중 오류 발생');
