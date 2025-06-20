@@ -43,7 +43,7 @@ export class BulletinController {
 
   // 게시글 상세 조회
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
+  @Get('detail/:id')
   getBulletinById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<BulletinBoard> {
