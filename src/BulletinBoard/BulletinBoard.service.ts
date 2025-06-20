@@ -146,7 +146,7 @@ export class BulletinService {
     try {
       const posts = await this.bulletinRepository
         .createQueryBuilder('board')
-        .where(':category = ANY(board.category)', { category })
+        .where('board.category = :category', { category })
         .orderBy('board.createdAt', 'DESC')
         .getMany();
 
