@@ -1,36 +1,32 @@
-// import { Injectable } from '@nestjs/common';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-// import { Chat } from './chat.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ChatMessage } from './chat.entity';
+import { Repository } from 'typeorm';
+import { User } from '../../tempUser/user.entity';
 
-// @Injectable()
-// export class ChatService {
-//   constructor(
-//     @InjectRepository(Chat)
-//     private readonly chatRepository: Repository<Chat>,
-//   ) {}
+@Injectable()
+export class ChatService {
+  constructor(
+    @InjectRepository(ChatMessage)
+    private readonly chatRepository: Repository<ChatMessage>,
+  ) {}
 
-//   async saveMessage(
-//     menteeId: number,
-//     mentorId: number,
-//     content: string,
-//   ): Promise<Chat> {
-//     const message = this.chatRepository.create({
-//       menteeId,
-//       mentorId,
-//       content,
-//       timestamp: new Date(),
-//     });
-//     return await this.chatRepository.save(message);
-//   }
+  async saveMessage(
+    sender: User,
+    receiver: User,
+    content: string,
+  ): Promise<ChatMessage> {
+    const message = this.chatRepository.create({ sender, receiver, content });
+    return await this.chatRepository.save(message);
+  }
 
-//   async getMessages(menteeId: number, mentorId: number): Promise<Chat[]> {
-//     return await this.chatRepository.find({
-//       where: [
-//         { menteeId, mentorId },
-//         { menteeId: mentorId, mentorId: menteeId }, // 양방향 채팅 기록 조회
-//       ],
-//       order: { timestamp: 'ASC' },
-//     });
-//   }
-// }
+  async getMessagesBetweenUsers(userAId: number, userBId: number) {
+    return this.chatRepository.find({
+      where: [
+        { sender: { id: userAId }, receiver: { id: userBId } },
+        { sender: { id: userBId }, receiver: { id: userAId } },
+      ],
+      order: { createdAt: 'ASC' },
+    });
+  }
+}

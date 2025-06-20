@@ -1,24 +1,26 @@
-// import {
-//   Entity,
-//   PrimaryGeneratedColumn,
-//   Column,
-//   CreateDateColumn,
-// } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+} from 'typeorm';
+import { User } from '../../tempUser/user.entity';
 
-// @Entity()
-// export class Chat {
-//   @PrimaryGeneratedColumn()
-//   id: number;
+@Entity()
+export class ChatMessage {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-//   @Column()
-//   menteeId: number;
+  @ManyToOne(() => User, (user) => user.id, { eager: true })
+  sender: User;
 
-//   @Column()
-//   mentorId: number;
+  @ManyToOne(() => User, (user) => user.id, { eager: true })
+  receiver: User;
 
-//   @Column('text')
-//   content: string;
+  @Column('text')
+  content: string;
 
-//   @CreateDateColumn()
-//   timestamp: Date;
-// }
+  @CreateDateColumn()
+  createdAt: Date;
+}

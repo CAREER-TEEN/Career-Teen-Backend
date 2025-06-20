@@ -14,6 +14,8 @@ import { StudyGroup } from './StudyGroup/StudyGroup.entity';
 import { StudyGroupModule } from './StudyGroup/StudyGroup.module';
 import { Comment } from './comment/comment.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { ChatModule } from './chat/chat.module';
+import { ChatMessage } from './chat/chat.entity';
 
 @Module({
   imports: [
@@ -32,7 +34,7 @@ import { JwtModule } from '@nestjs/jwt';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, BulletinBoard, StudyGroup, Comment],
+      entities: [User, BulletinBoard, StudyGroup, Comment, ChatMessage],
       synchronize: false,
       logging: true,
       retryAttempts: 3,
@@ -42,6 +44,7 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     BulletinModule,
     StudyGroupModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [
