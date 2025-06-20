@@ -138,6 +138,16 @@ export class BulletinService {
     }
   }
 
+  async getById(id: number): Promise<BulletinBoard> {
+    const bulletin = await this.bulletinRepository.findOne({ where: { id } });
+
+    if (!bulletin) {
+      throw new NotFoundException(`게시글 ID ${id}를 찾을 수 없습니다.`);
+    }
+
+    return bulletin;
+  }
+
   async getPostsByCategory(category: string): Promise<BulletinBoard[]> {
     if (!category) {
       throw new BadRequestException('카테고리를 지정해주세요.');

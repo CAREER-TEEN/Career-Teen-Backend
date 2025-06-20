@@ -41,6 +41,15 @@ export class BulletinController {
     return this.bulletinService.create(input, userId);
   }
 
+  // 게시글 상세 조회
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  getBulletinById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<BulletinBoard> {
+    return this.bulletinService.getById(id);
+  }
+
   // 게시글 수정
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
